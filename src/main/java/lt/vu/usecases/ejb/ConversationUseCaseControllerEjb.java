@@ -1,4 +1,4 @@
-package lt.vu.conversation;
+package lt.vu.usecases.ejb;
 
 import lombok.Getter;
 import lt.vu.entities.Course;
@@ -13,13 +13,14 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.List;
 
 @Named
 @ConversationScoped
 @Stateful
-public class UseCaseController implements Serializable {
+public class ConversationUseCaseControllerEjb implements Serializable {
 
-    private static final String PAGE_INDEX_REDIRECT = "conversation?faces-redirect=true";
+    private static final String PAGE_INDEX_REDIRECT = "conversation-ejb?faces-redirect=true";
 
     private enum CURRENT_FORM {
         CREATE_COURSE, CREATE_STUDENT, CONFIRMATION
@@ -33,9 +34,9 @@ public class UseCaseController implements Serializable {
     private Conversation conversation;
 
     @Inject
-    private CourseService courseService;
+    private CourseEjbDAO courseEjbDAO;
     @Inject
-    private StudentService studentService;
+    private StudentEjbDAO studentEjbDAO;
 
     @Getter
     private Course course = new Course();
@@ -52,7 +53,6 @@ public class UseCaseController implements Serializable {
      */
     public void createCourse() {
         conversation.begin();
-        courseService.create(course);
         currentForm = CURRENT_FORM.CREATE_STUDENT;
     }
 
@@ -60,7 +60,6 @@ public class UseCaseController implements Serializable {
      * The second conversation step.
      */
     public void createStudent() {
-        studentService.create(student);
         student.getCourseList().add(course);
         course.getStudentList().add(student);
         currentForm = CURRENT_FORM.CONFIRMATION;
@@ -71,6 +70,8 @@ public class UseCaseController implements Serializable {
      */
     public String ok() {
         try {
+            courseEjbDAO.create(course);
+            studentEjbDAO.create(student);
             em.joinTransaction();
             em.flush();
             Messages.addGlobalInfo("Success!");
@@ -94,4 +95,7 @@ public class UseCaseController implements Serializable {
         return PAGE_INDEX_REDIRECT;
     }
 
+    public List<Student> getAllStudents() {
+        return studentEjbDAO.getAllStudents();
+    }
 }
