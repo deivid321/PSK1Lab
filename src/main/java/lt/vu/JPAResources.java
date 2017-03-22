@@ -1,4 +1,4 @@
-package lt.vu.usecases.cdi;
+package lt.vu;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.context.RequestScoped;

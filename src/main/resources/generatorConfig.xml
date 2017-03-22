@@ -4,9 +4,9 @@
         "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
 
 <generatorConfiguration>
-    <context id="StudentsDB" targetRuntime="MyBatis3Simple">
+    <context id="DormitoryDB" targetRuntime="MyBatis3Simple">
         <jdbcConnection driverClass="org.h2.Driver"
-                        connectionURL="jdbc:h2:~/h2database/StudentsDB;AUTO_SERVER=TRUE"
+                        connectionURL="jdbc:h2:~/h2database/DormitoryDB;AUTO_SERVER=TRUE"
                         userId="sa"
                         password="sa">
         </jdbcConnection>
@@ -16,17 +16,17 @@
                         <!--password="postgres">-->
         <!--</jdbcConnection>-->
 
-        <javaModelGenerator targetPackage="lt.vu.usecases.mybatis.model" targetProject="MAVEN" />
+        <javaModelGenerator targetPackage="lt.vu.mybatis.model" targetProject="MAVEN" />
 
         <!-- Anotacijų variantas - mažiau galimybių, bet paprastesnis -->
-        <!--<javaClientGenerator type="ANNOTATEDMAPPER" targetPackage="lt.vu.usecases.mybatis.dao" targetProject="MAVEN" />-->
+        <!--<javaClientGenerator type="ANNOTATEDMAPPER" targetPackage="lt.vu.mybatis.dao" targetProject="MAVEN" />-->
 
         <!-- XML variantas - daugiau galimybių -->
-        <sqlMapGenerator targetPackage="lt.vu.usecases.mybatis.xml" targetProject="MAVEN" />
-        <javaClientGenerator type="XMLMAPPER" targetPackage="lt.vu.usecases.mybatis.dao" targetProject="MAVEN" />
+        <sqlMapGenerator targetPackage="lt.vu.mybatis.xml" targetProject="MAVEN" />
+        <javaClientGenerator type="XMLMAPPER" targetPackage="lt.vu.mybatis.dao" targetProject="MAVEN" />
 
         
-        <table schema="public" tableName="university">
+        <table schema="public" tableName="dormitory">
             <generatedKey column="id" identity="true" sqlStatement="JDBC" />
             <ignoreColumn column="opt_lock_version" />
         </table>
@@ -34,11 +34,15 @@
             <generatedKey column="id" identity="true" sqlStatement="JDBC" />
             <ignoreColumn column="opt_lock_version" />
         </table>
-        <table schema="public" tableName="course">
+        <table schema="public" tableName="room">
             <generatedKey column="id" identity="true" sqlStatement="JDBC" />
             <ignoreColumn column="opt_lock_version" />
         </table>
-        <table schema="public" tableName="student_course">
+        <table schema="public" tableName="student_history">
+            <generatedKey column="id" identity="true" sqlStatement="JDBC" />
+            <ignoreColumn column="opt_lock_version" />
+        </table>
+        <table schema="public" tableName="student_room">
         </table>
     </context>
 </generatorConfiguration>

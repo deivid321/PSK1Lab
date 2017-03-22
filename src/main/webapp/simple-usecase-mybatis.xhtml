@@ -18,14 +18,14 @@
                     <p:column headerText="Student">
                         <h:outputText value="#{student.firstName} #{student.lastName} #{student.registrationNo}" />
                     </p:column>
-                    <p:column headerText="Courses">
-                        <ui:repeat var="course" value="#{student.courses}">
-                            <h:outputText value="#{course.name} " />
+                    <p:column headerText="Room">
+                        <ui:repeat var="room" value="#{student.room}">
+                            <h:outputText value="#{room.getName  ()} " />
                         </ui:repeat>
                     </p:column>
-                    <p:column headerText="University">
+                    <!--<p:column headerText="University">
                         <h:outputText value="#{student.university.title} " />
-                    </p:column>
+                    </p:column> -->
                 </p:dataTable>
             </p:fieldset>
 
@@ -50,7 +50,7 @@
                     <td>
                         <h:panelGrid columns="3">
                             <p:outputLabel for="courseName" value="Course name"/>
-                            <p:inputText id="courseName" value="#{requestUseCaseControllerMyBatis.course.name}"/>
+                            <p:inputText id="courseName" value="#{requestUseCaseControllerMyBatis.room.name}"/>
                             <p:message for="courseName"/>
                         </h:panelGrid>
                     </td>
@@ -58,7 +58,7 @@
             </table>
 
             <p:commandButton value="Create student and course"
-                             actionListener="#{requestUseCaseControllerMyBatis.createCourseStudent()}"
+                             actionListener="#{requestUseCaseControllerMyBatis.createRoomStudent()}"
                              ajax="false"/>
 
             <p:messages globalOnly="true"/>

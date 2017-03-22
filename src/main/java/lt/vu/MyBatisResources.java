@@ -1,4 +1,4 @@
-package lt.vu.usecases.cdi;
+package lt.vu;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.io.Resources;

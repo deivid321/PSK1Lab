@@ -1,32 +1,37 @@
-package lt.vu.usecases.ejb;
+package lt.vu.conversation;
 
+import Deivydas.RoomEntity;
+import Deivydas.StudentEntity;
 import lombok.Getter;
-import lt.vu.entities.Course;
-import lt.vu.entities.Student;
+import lombok.extern.slf4j.Slf4j;
+import lt.vu.dao.RoomDAO;
+import lt.vu.dao.StudentDAO;
 import org.omnifaces.util.Faces;
 import org.omnifaces.util.Messages;
 
-import javax.ejb.Stateful;
 import javax.enterprise.context.Conversation;
 import javax.enterprise.context.ConversationScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.persistence.*;
+import javax.persistence.EntityManager;
+import javax.persistence.OptimisticLockException;
+import javax.persistence.PersistenceException;
+import javax.transaction.Transactional;
 import java.io.Serializable;
 import java.util.List;
 
 @Named
 @ConversationScoped
-@Stateful
-public class ConversationUseCaseControllerEjb implements Serializable {
+@Slf4j
+public class ConversationUseCaseControllerCdiDao implements Serializable {
 
-    private static final String PAGE_INDEX_REDIRECT = "conversation-ejb?faces-redirect=true";
+    private static final String PAGE_INDEX_REDIRECT = "conversation-cdi?faces-redirect=true";
 
     private enum CURRENT_FORM {
         CREATE_COURSE, CREATE_STUDENT, CONFIRMATION
     }
 
-    @PersistenceContext(type = PersistenceContextType.EXTENDED, synchronization = SynchronizationType.UNSYNCHRONIZED)
+    @Inject
     private EntityManager em;
 
     @Inject
@@ -34,14 +39,14 @@ public class ConversationUseCaseControllerEjb implements Serializable {
     private Conversation conversation;
 
     @Inject
-    private CourseEjbDAO courseEjbDAO;
+    private RoomDAO roomDAO;
     @Inject
-    private StudentEjbDAO studentEjbDAO;
+    private StudentDAO studentDAO;
 
     @Getter
-    private Course course = new Course();
+    private RoomEntity room = new RoomEntity();
     @Getter
-    private Student student = new Student();
+    private StudentEntity student = new StudentEntity();
 
     private CURRENT_FORM currentForm = CURRENT_FORM.CREATE_COURSE;
     public boolean isCurrentForm(CURRENT_FORM form) {
@@ -60,27 +65,29 @@ public class ConversationUseCaseControllerEjb implements Serializable {
      * The second conversation step.
      */
     public void createStudent() {
-        student.getCourseList().add(course);
-        course.getStudentList().add(student);
+        student.setRoom(room);
+        room.getStudents().add(student);
         currentForm = CURRENT_FORM.CONFIRMATION;
     }
 
     /**
      * The last conversation step.
      */
+    @Transactional(Transactional.TxType.REQUIRED)
     public String ok() {
         try {
-            courseEjbDAO.create(course);
-            studentEjbDAO.create(student);
-            em.joinTransaction();
+            roomDAO.create(room);
+            studentDAO.create(student);
             em.flush();
             Messages.addGlobalInfo("Success!");
         } catch (OptimisticLockException ole) {
             // Other user was faster...
             Messages.addGlobalWarn("Please try again");
+            log.warn("Optimistic Lock violated: ", ole);
         } catch (PersistenceException pe) {
             // Some problems with DB - most often this is programmer's fault.
-           Messages.addGlobalError("Finita la commedia...");
+            Messages.addGlobalError("Finita la commedia...");
+            log.error("Error ending conversation: ", pe);
         }
         Faces.getFlash().setKeepMessages(true);
         conversation.end();
@@ -95,7 +102,8 @@ public class ConversationUseCaseControllerEjb implements Serializable {
         return PAGE_INDEX_REDIRECT;
     }
 
-    public List<Student> getAllStudents() {
-        return studentEjbDAO.getAllStudents();
+    public List<StudentEntity> getAllStudents() {
+        List<StudentEntity> st =  studentDAO.getAllStudents();
+        return st;
     }
 }

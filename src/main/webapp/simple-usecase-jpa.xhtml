@@ -19,12 +19,9 @@
                         <h:outputText value="#{student.firstName} #{student.lastName} #{student.registrationNo}" />
                     </p:column>
                     <p:column headerText="Courses">
-                        <ui:repeat var="course" value="#{student.courseList}">
-                            <h:outputText value="#{course.name} " />
+                        <ui:repeat var="room" value="#{student.room}">
+                            <h:outputText value="#{room.name} " />
                         </ui:repeat>
-                    </p:column>
-                    <p:column headerText="University">
-                        <h:outputText value="#{student.university.title} " />
                     </p:column>
                 </p:dataTable>
             </p:fieldset>
@@ -50,7 +47,7 @@
                     <td>
                         <h:panelGrid columns="3">
                             <p:outputLabel for="courseName" value="Course name"/>
-                            <p:inputText id="courseName" value="#{requestUseCaseControllerJPA.course.name}"/>
+                            <p:inputText id="courseName" value="#{requestUseCaseControllerJPA.room.name}"/>
                             <p:message for="courseName"/>
                         </h:panelGrid>
                     </td>
@@ -58,7 +55,7 @@
             </table>
 
             <p:commandButton value="Create student and course"
-                             actionListener="#{requestUseCaseControllerJPA.createCourseStudent()}"
+                             actionListener="#{requestUseCaseControllerJPA.createRoomStudent()}"
                              ajax="false"/>
 
             <p:messages globalOnly="true"/>

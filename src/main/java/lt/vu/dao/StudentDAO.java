@@ -1,6 +1,6 @@
-package lt.vu.usecases.cdi.dao;
+package lt.vu.dao;
 
-import lt.vu.entities.Student;
+import Deivydas.StudentEntity;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -12,11 +12,11 @@ public class StudentDAO {
     @Inject
     private EntityManager em;
 
-    public void create(Student student) {
+    public void create(StudentEntity student) {
         em.persist(student);
     }
 
-    public List<Student> getAllStudents() {
-        return em.createNamedQuery("Student.findAll", Student.class).getResultList();
+    public List<StudentEntity> getAllStudents() {
+        return em.createNamedQuery("Student.findAll", StudentEntity.class).getResultList();
     }
 }

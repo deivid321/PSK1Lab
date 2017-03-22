@@ -1,11 +1,11 @@
-package lt.vu.usecases.cdi.simple;
+package lt.vu;
 
+import Deivydas.RoomEntity;
+import Deivydas.StudentEntity;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import lt.vu.entities.Course;
-import lt.vu.entities.Student;
-import lt.vu.usecases.cdi.dao.CourseDAO;
-import lt.vu.usecases.cdi.dao.StudentDAO;
+import lt.vu.dao.RoomDAO;
+import lt.vu.dao.StudentDAO;
 
 import javax.enterprise.inject.Model;
 import javax.inject.Inject;
@@ -17,25 +17,25 @@ import java.util.List;
 public class RequestUseCaseControllerJPA {
 
     @Getter
-    private Course course = new Course();
+    private RoomEntity room = new RoomEntity();
     @Getter
-    private Student student = new Student();
+    private StudentEntity student = new StudentEntity();
 
     @Inject
-    private CourseDAO courseDAO;
+    private RoomDAO roomDAO;
     @Inject
     private StudentDAO studentDAO;
 
     @Transactional
-    public void createCourseStudent() {
-        student.getCourseList().add(course);
-        course.getStudentList().add(student);
-        courseDAO.create(course);
+    public void createRoomStudent() {
+        student.setRoom(room);
+        room.getStudents().add(student);
+        roomDAO.create(room);
         studentDAO.create(student);
         log.info("Maybe OK...");
     }
 
-    public List<Student> getAllStudents() {
+    public List<StudentEntity> getAllStudents() {
         return studentDAO.getAllStudents();
     }
 }
