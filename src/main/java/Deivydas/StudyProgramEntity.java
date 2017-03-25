@@ -13,23 +13,23 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
-@Table(name = "ROOM", schema = "PUBLIC", catalog = "DORMITORYDB")
-public class RoomEntity {
+@Table(name = "STUDY_PROGRAM", schema = "PUBLIC", catalog = "DORMITORYDB")
+public class StudyProgramEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID", nullable = false)
     private int id;
     @Basic
-    @Column(name = "NAME", nullable = true, length = 4)
-    private String name;
+    @Column(name = "TITLE", nullable = true, length = 250)
+    private String title;
+    @Basic
+    @Column(name = "FACULTY", nullable = true, length = 250)
+    private String faculty;
     @Version
     @Column(name = "OPT_LOCK_VERSION", nullable = true)
     private Integer optLockVersion;
-    @Basic
-    @Column(name = "MAX_PEOPLE", nullable = true)
-    private Integer maxPeople;
 
-    @OneToMany(mappedBy = "room")
+    @ManyToMany(mappedBy = "studyProgramList")
     private List<StudentEntity> studentList = new ArrayList<>();
 
     @Override
@@ -37,13 +37,13 @@ public class RoomEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        RoomEntity that = (RoomEntity) o;
+        StudyProgramEntity that = (StudyProgramEntity) o;
 
         if (id != that.id) return false;
-        if (name != null ? !name.equals(that.name) : that.name != null) return false;
+        if (title != null ? !title.equals(that.title) : that.title != null) return false;
+        if (faculty != null ? !faculty.equals(that.faculty) : that.faculty != null) return false;
         if (optLockVersion != null ? !optLockVersion.equals(that.optLockVersion) : that.optLockVersion != null)
             return false;
-        if (maxPeople != null ? !maxPeople.equals(that.maxPeople) : that.maxPeople != null) return false;
 
         return true;
     }
@@ -51,9 +51,9 @@ public class RoomEntity {
     @Override
     public int hashCode() {
         int result = id;
-        result = 31 * result + (name != null ? name.hashCode() : 0);
+        result = 31 * result + (title != null ? title.hashCode() : 0);
+        result = 31 * result + (faculty != null ? faculty.hashCode() : 0);
         result = 31 * result + (optLockVersion != null ? optLockVersion.hashCode() : 0);
-        result = 31 * result + (maxPeople != null ? maxPeople.hashCode() : 0);
         return result;
     }
 }

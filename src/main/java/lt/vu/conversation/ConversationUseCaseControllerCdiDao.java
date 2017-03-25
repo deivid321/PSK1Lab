@@ -56,7 +56,7 @@ public class ConversationUseCaseControllerCdiDao implements Serializable {
     /**
      * The first conversation step.
      */
-    public void createCourse() {
+    public void createRoom() {
         conversation.begin();
         currentForm = CURRENT_FORM.CREATE_STUDENT;
     }
@@ -66,7 +66,7 @@ public class ConversationUseCaseControllerCdiDao implements Serializable {
      */
     public void createStudent() {
         student.setRoom(room);
-        room.getStudents().add(student);
+        room.getStudentList().add(student);
         currentForm = CURRENT_FORM.CONFIRMATION;
     }
 

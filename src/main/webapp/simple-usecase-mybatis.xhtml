@@ -11,7 +11,6 @@
     </h:head>
 
     <h:body>
-
         <h1>Request type usecase example (DAO with MyBatis)</h1>
         <h:form>
             <p:fieldset legend="All students" toggleable="true" style="width: 50%">
@@ -19,14 +18,14 @@
                     <p:column headerText="Student">
                         <h:outputText value="#{student.firstName} #{student.lastName} #{student.registrationNo}" />
                     </p:column>
-                    <p:column headerText="Room">
-                        <ui:repeat var="room" value="#{student.room}">
-                            <h:outputText value="#{room.getName  ()} " />
+                    <p:column headerText="Study Program">
+                        <ui:repeat var="program" value="#{student.studyProgramList}">
+                            <h:outputText value="#{program.title} " />
                         </ui:repeat>
                     </p:column>
-                    <!--<p:column headerText="University">
-                        <h:outputText value="#{student.university.title} " />
-                    </p:column> -->
+                    <p:column headerText="Room">
+                        <h:outputText value="#{student.room.name} " />
+                    </p:column>
                 </p:dataTable>
             </p:fieldset>
 
@@ -50,16 +49,16 @@
                     </td>
                     <td>
                         <h:panelGrid columns="3">
-                            <p:outputLabel for="courseName" value="Course name"/>
-                            <p:inputText id="courseName" value="#{requestUseCaseControllerMyBatis.room.name}"/>
+                            <p:outputLabel for="courseName" value="Study program"/>
+                            <p:inputText id="courseName" value="#{requestUseCaseControllerMyBatis.program.title}"/>
                             <p:message for="courseName"/>
                         </h:panelGrid>
                     </td>
                 </tr>
             </table>
 
-            <p:commandButton value="Create student and course"
-                             actionListener="#{requestUseCaseControllerMyBatis.createRoomStudent()}"
+            <p:commandButton value="Create student and room"
+                             actionListener="#{requestUseCaseControllerMyBatis.createStudentStudyProgram()}"
                              ajax="false"/>
 
             <p:messages globalOnly="true"/>

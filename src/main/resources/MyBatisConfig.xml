@@ -7,7 +7,8 @@
         <typeAlias type="lt.vu.mybatis.model.Student" alias="Student"/>
         <typeAlias type="lt.vu.mybatis.model.Room" alias="Room"/>
         <typeAlias type="lt.vu.mybatis.model.Dormitory" alias="Dormitory"/>
-        <typeAlias type="lt.vu.mybatis.model.StudentHistory" alias="StudentHistory"/>
+        <typeAlias type="lt.vu.mybatis.model.StudyProgram" alias="StudyProgram"/>
+        <typeAlias type="lt.vu.mybatis.model.StudentStudyProgram" alias="StudentStudyProgram"/>
     </typeAliases>
     <environments default="development">
         <environment id="development">
@@ -19,9 +20,10 @@
         </environment>
     </environments>
     <mappers>
-        <mapper resource="mybatis/xml/RoomMapper.xml"/>
         <mapper resource="mybatis/xml/StudentMapper.xml"/>
-        <mapper resource="mybatis/xml/StudentHistoryMapper.xml"/>
+        <mapper resource="mybatis/xml/RoomMapper.xml"/>
+        <mapper resource="mybatis/xml/StudyProgramMapper.xml"/>
         <mapper resource="mybatis/xml/DormitoryMapper.xml"/>
+        <mapper resource="mybatis/xml/StudentStudyProgramMapper.xml"/>
     </mappers>
 </configuration>

@@ -4,10 +4,14 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
- * Created by vdeiv on 2017-03-05.
+ * Created by vdeiv on 2017-03-25.
  */
+@Getter
+@Setter
 @Entity
 @Table(name = "STUDENT", schema = "PUBLIC", catalog = "DORMITORYDB")
 @NamedQueries({
@@ -17,73 +21,34 @@ import javax.persistence.*;
         @NamedQuery(name = "Student.findByLastName", query = "SELECT s FROM StudentEntity s WHERE s.lastName LIKE :lastName"),
         @NamedQuery(name = "Student.findByRegistrationNo", query = "SELECT s FROM StudentEntity s WHERE s.registrationNo = :registrationNo")
 })
-@Getter
-@Setter
 public class StudentEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ID")
+    @Column(name = "ID", nullable = false)
     private int id;
     @Basic
-    @Column(name = "FIRST_NAME")
+    @Column(name = "FIRST_NAME", nullable = true, length = 20)
     private String firstName;
     @Basic
-    @Column(name = "LAST_NAME")
+    @Column(name = "LAST_NAME", nullable = true, length = 20)
     private String lastName;
     @Basic
-    @Column(name = "REGISTRATION_NO")
+    @Column(name = "REGISTRATION_NO", nullable = true, length = 20)
     private String registrationNo;
+
     @Version
-    @Column(name = "OPT_LOCK_VERSION")
+    @Column(name = "OPT_LOCK_VERSION", nullable = true)
     private Integer optLockVersion;
 
+    @JoinColumn(name = "ROOM_ID", referencedColumnName = "ID")
     @ManyToOne
-    @JoinColumn(name="ROOM_ID")
     private RoomEntity room;
 
-    @OneToOne
-    @JoinColumn(name="HISTORY_ID")
-    private StudentHistoryEntity history;
-
-    @Basic
-    @Column(name = "FIRST_NAME")
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    @Basic
-    @Column(name = "LAST_NAME")
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    @Basic
-    @Column(name = "REGISTRATION_NO")
-    public String getRegistrationNo() {
-        return registrationNo;
-    }
-
-    public void setRegistrationNo(String registrationNo) {
-        this.registrationNo = registrationNo;
-    }
-
-    @Basic
-    @Column(name = "OPT_LOCK_VERSION")
-    public Integer getOptLockVersion() {
-        return optLockVersion;
-    }
-
-    public void setOptLockVersion(Integer optLockVersion) {
-        this.optLockVersion = optLockVersion;
-    }
+    @JoinTable(name = "STUDENT_STUDY_PROGRAM", joinColumns = {
+            @JoinColumn(name = "STUDENT_ID", referencedColumnName = "ID")}, inverseJoinColumns = {
+            @JoinColumn(name = "STUDY_PROGRAM_ID", referencedColumnName = "ID")})
+    @ManyToMany
+    private List<StudyProgramEntity> studyProgramList = new ArrayList<>();
 
     @Override
     public boolean equals(Object o) {

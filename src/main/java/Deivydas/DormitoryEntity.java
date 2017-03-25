@@ -1,60 +1,26 @@
 package Deivydas;
 
 import javax.persistence.*;
-import java.util.List;
 
 /**
- * Created by vdeiv on 2017-03-05.
+ * Created by vdeiv on 2017-03-25.
  */
 @Entity
 @Table(name = "DORMITORY", schema = "PUBLIC", catalog = "DORMITORYDB")
 public class DormitoryEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ID")
+    @Column(name = "ID", nullable = false)
     private int id;
     @Basic
-    @Column(name = "STREET")
+    @Column(name = "STREET", nullable = true, length = 50)
     private String street;
     @Basic
-    @Column(name = "STREET_NUMBER")
+    @Column(name = "STREET_NUMBER", nullable = true)
     private Integer streetNumber;
-    @Version
-    @Column(name = "OPT_LOCK_VERSION")
+    @Basic
+    @Column(name = "OPT_LOCK_VERSION", nullable = true)
     private Integer optLockVersion;
-
-    @OneToMany(mappedBy = "dormitory")
-    private List<RoomEntity> rooms;
-
-    @Basic
-    @Column(name = "STREET")
-    public String getStreet() {
-        return street;
-    }
-
-    public void setStreet(String street) {
-        this.street = street;
-    }
-
-    @Basic
-    @Column(name = "STREET_NUMBER")
-    public Integer getStreetNumber() {
-        return streetNumber;
-    }
-
-    public void setStreetNumber(Integer streetNumber) {
-        this.streetNumber = streetNumber;
-    }
-
-    @Basic
-    @Column(name = "OPT_LOCK_VERSION")
-    public Integer getOptLockVersion() {
-        return optLockVersion;
-    }
-
-    public void setOptLockVersion(Integer optLockVersion) {
-        this.optLockVersion = optLockVersion;
-    }
 
     @Override
     public boolean equals(Object o) {

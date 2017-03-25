@@ -2,10 +2,12 @@ package lt.vu;
 
 import Deivydas.RoomEntity;
 import Deivydas.StudentEntity;
+import Deivydas.StudyProgramEntity;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import lt.vu.dao.RoomDAO;
 import lt.vu.dao.StudentDAO;
+import lt.vu.dao.StudyProgramDAO;
 
 import javax.enterprise.inject.Model;
 import javax.inject.Inject;
@@ -17,20 +19,20 @@ import java.util.List;
 public class RequestUseCaseControllerJPA {
 
     @Getter
-    private RoomEntity room = new RoomEntity();
+    private StudyProgramEntity program = new StudyProgramEntity();
     @Getter
     private StudentEntity student = new StudentEntity();
 
     @Inject
-    private RoomDAO roomDAO;
+    private StudyProgramDAO studyProgramDAO;
     @Inject
     private StudentDAO studentDAO;
 
     @Transactional
-    public void createRoomStudent() {
-        student.setRoom(room);
-        room.getStudents().add(student);
-        roomDAO.create(room);
+    public void createProgramStudent() {
+        student.getStudyProgramList().add(program);
+        program.getStudentList().add(student);
+        studyProgramDAO.create(program);
         studentDAO.create(student);
         log.info("Maybe OK...");
     }

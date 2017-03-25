@@ -38,11 +38,11 @@
             <generatedKey column="id" identity="true" sqlStatement="JDBC" />
             <ignoreColumn column="opt_lock_version" />
         </table>
-        <table schema="public" tableName="student_history">
+        <table schema="public" tableName="study_program">
             <generatedKey column="id" identity="true" sqlStatement="JDBC" />
             <ignoreColumn column="opt_lock_version" />
         </table>
-        <table schema="public" tableName="student_room">
+        <table schema="public" tableName="student_study_program">
         </table>
     </context>
 </generatorConfiguration>
