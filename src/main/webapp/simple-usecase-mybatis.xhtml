@@ -7,58 +7,65 @@
 >
     <h:head>
         <h:outputStylesheet name="css/styles.css" />
-        <title>Request type usecase (DAO with MyBatis)</title>
+        <title>Pridėti studentą, studijų programą ir kambarį</title>
     </h:head>
 
     <h:body>
-        <h1>Request type usecase example (DAO with MyBatis)</h1>
+        <h1>Pridėti studentą, studijų programą ir kambarį (MyBatis) </h1>
         <h:form>
-            <p:fieldset legend="All students" toggleable="true" style="width: 50%">
+            <p:fieldset legend="Studento informacija" toggleable="false" style="width: 70%">
                 <p:dataTable value="#{requestUseCaseControllerMyBatis.getAllStudents()}" var="student">
-                    <p:column headerText="Student">
+                    <p:column headerText="Studentas">
                         <h:outputText value="#{student.firstName} #{student.lastName} #{student.registrationNo}" />
                     </p:column>
-                    <p:column headerText="Study Program">
+                    <p:column headerText="Studijų programa">
                         <ui:repeat var="program" value="#{student.studyProgramList}">
                             <h:outputText value="#{program.title} " />
                         </ui:repeat>
                     </p:column>
-                    <p:column headerText="Room">
+                    <p:column headerText="Kambaris">
                         <h:outputText value="#{student.room.name} " />
                     </p:column>
                 </p:dataTable>
             </p:fieldset>
 
-            <h2>Create new course and student</h2>
+            <h2>Pridėti studentą, studijų programą ir kambarį</h2>
             <table>
                 <tr>
                     <td>
                         <h:panelGrid columns="3">
-                            <p:outputLabel for="firstName" value="First name"/>
+                            <p:outputLabel for="firstName" value="Vardas"/>
                             <p:inputText id="firstName" value="#{requestUseCaseControllerMyBatis.student.firstName}"/>
                             <p:message for="firstName"/>
 
-                            <p:outputLabel for="lastName" value="Last name"/>
+                            <p:outputLabel for="lastName" value="Pavardė"/>
                             <p:inputText id="lastName" value="#{requestUseCaseControllerMyBatis.student.lastName}"/>
                             <p:message for="lastName"/>
 
-                            <p:outputLabel for="regnr" value="Registration No."/>
+                            <p:outputLabel for="regnr" value="Studento numeris"/>
                             <p:inputText id="regnr" value="#{requestUseCaseControllerMyBatis.student.registrationNo}"/>
                             <p:message for="regnr"/>
                         </h:panelGrid>
                     </td>
                     <td>
                         <h:panelGrid columns="3">
-                            <p:outputLabel for="courseName" value="Study program"/>
+                            <p:outputLabel for="courseName" value="Studijų programa"/>
                             <p:inputText id="courseName" value="#{requestUseCaseControllerMyBatis.program.title}"/>
                             <p:message for="courseName"/>
+                        </h:panelGrid>
+                    </td>
+                    <td>
+                        <h:panelGrid columns="3">
+                            <p:outputLabel for="roomName" value="Kambaris"/>
+                            <p:inputText id="roomName" value="#{requestUseCaseControllerMyBatis.room.name}"/>
+                            <p:message for="roomName"/>
                         </h:panelGrid>
                     </td>
                 </tr>
             </table>
 
-            <p:commandButton value="Create student and room"
-                             actionListener="#{requestUseCaseControllerMyBatis.createStudentStudyProgram()}"
+            <p:commandButton value="Pridėti"
+                             actionListener="#{requestUseCaseControllerMyBatis.createStudentStudyProgramRoom()}"
                              ajax="false"/>
 
             <p:messages globalOnly="true"/>

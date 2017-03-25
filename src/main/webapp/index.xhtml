@@ -2,19 +2,30 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
->
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
 <h:head>
-    <h:outputStylesheet name="css/styles.css" />
+    <h:outputStylesheet name="css/styles.css"/>
     <title>Laboratory classes</title>
 </h:head>
 
 <h:body>
-    <h1>Laboratory classes for the 1st assignment</h1>
-    <h3>Please work: #{pirmasKomponentas.sakykLabas()}</h3>
-    <h3>Class name: #{pirmasKomponentas.getClass().name}</h3>
+    <h1>1 Laboratorinis darbas</h1>
+    <h:form>
+        <h3>Sveiki atvyke: #{pirmasKomponentas.getUserName()}</h3>
+        <p:outputPanel rendered="true">
+            <h:panelGrid id="grid1" columns="3">
+                <p:outputLabel for="name" value="Tavo vardas"/>
+                <p:inputText id="name" value="#{pirmasKomponentas.userName}"/>
+                <p:message for="name"/>
+            </h:panelGrid>
+            <p:commandButton value="Submit" update="@form"/>
+        </p:outputPanel>
+        <p:messages globalOnly="true"/>
+    </h:form>
+
     <dl>
-        <dt><b>Transactions</b></dt>
-        <dd><p>#{firstComp.sayHello()}</p></dd>
 
         <dt><b>Request type use-case example:</b></dt>
         <dd>
@@ -28,15 +39,59 @@
         <dd>
             <p>
                 <h:link outcome="conversation-cdi">Example with CDI - Jei naudojate TomEE, pridėkite Hibernate biblioteką (žr. aukščiau)</h:link><br/>
-                Papildoma medžiaga: <h:link outcome="conversation-ejb">Example with EJB</h:link>
             </p>
         </dd>
-
-        <dt>Papildoma medžiaga: <b>Asynchronous calls</b></dt>
-        <dd><p>#{compA.sayHello()}</p></dd>
-
-        <dt>Papildoma medžiaga: <b>Cache propagation</b></dt>
-        <dd><p>#{comp1.sayHello()}</p></dd>
     </dl>
+    <p:fieldset legend="Visa informacija" toggleable="true" status="hidden" style="width: 50%">
+        <p:dataTable value="#{requestUseCaseControllerJPA.getAllStudyPrograms()}" var="program">
+            <p:column headerText="Studiju programos">
+                <h:outputText value="#{program.title}"/>
+            </p:column>
+            <p:column headerText="Studentai">
+                <ui:repeat var="student" value="#{program.studentList}">
+                    <h:outputText value="#{student.firstName} #{student.lastName}; " />
+                </ui:repeat>
+            </p:column>
+        </p:dataTable>
+        <br></br>
+        <p:dataTable headerText="Students" value="#{requestUseCaseControllerJPA.getAllStudents()}" var="student">
+            <f:facet name="header">
+                Visi studentai
+            </f:facet>
+            <p:column headerText="Vardas">
+                <h:outputText value="#{student.firstName}"/>
+            </p:column>
+            <p:column headerText="Pavarde">
+                <h:outputText value="#{student.lastName}"/>
+            </p:column>
+            <p:column headerText="Studento numeris">
+                <h:outputText value="#{student.registrationNo}"/>
+            </p:column>
+            <p:column headerText="Studiju programa">
+                <ui:repeat var="studyProgram" value="#{student.studyProgramList}">
+                    <h:outputText value="#{studyProgram.title} " />
+                </ui:repeat>
+            </p:column>
+            <p:column headerText="Studento kambaris">
+                <h:outputText value="#{student.room.name}"/>
+            </p:column>
+        </p:dataTable>
+        <br></br>
+        <p:dataTable value="#{requestUseCaseControllerMyBatis.getAllRooms()}" var="room">
+            <f:facet name="header">
+                Visi kambariai
+            </f:facet>
+            <p:column headerText="Numeris">
+                <h:outputText value="#{room.name} " />
+            </p:column>
+            <p:column headerText="Bendrabutis">
+                <h:outputText value="#{room.dormitoryId} " />
+            </p:column>
+            <p:column headerText="Max zmoniu">
+                <h:outputText value="#{room.maxPeople} " />
+            </p:column>
+        </p:dataTable>
+    </p:fieldset>
+    <br></br>
 </h:body>
 </html>

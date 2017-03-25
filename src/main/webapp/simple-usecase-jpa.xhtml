@@ -4,21 +4,33 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:p="http://primefaces.org/ui"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
->
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
     <h:head>
         <h:outputStylesheet name="css/styles.css" />
-        <title>Request type usecase (DAO with JPA)</title>
+        <title>Prideti studenta ir studiju programa</title>
     </h:head>
 
     <h:body>
-        <h1>Request type usecase example (DAO with JPA)</h1>
+        <h1>Prideti studenta ir studiju programa</h1>
         <h:form>
-            <p:fieldset legend="All students" toggleable="true" style="width: 50%">
+            <p:fieldset legend="Studentai ir studiju programos" toggleable="false" style="width: 100%">
                 <p:dataTable value="#{requestUseCaseControllerJPA.getAllStudents()}" var="student">
-                    <p:column headerText="Student">
-                        <h:outputText value="#{student.firstName} #{student.lastName} #{student.registrationNo}" />
+                    <f:facet name="header">
+                        Studentas
+                    </f:facet>
+                    <p:column headerText="Vardas">
+                        <h:outputText value="#{student.firstName}" />
                     </p:column>
-                    <p:column headerText="Study program">
+                    <p:column headerText="Pavardė">
+                        <h:outputText value="#{student.lastName}" />
+                    </p:column>
+                    <p:column headerText="Numeris">
+                        <h:outputText value="#{student.registrationNo}" />
+                    </p:column>
+                    <p:column headerText="Kambaris">
+                        <h:outputText value="#{student.room.name}" />
+                    </p:column>
+                    <p:column headerText="Studiju programa">
                         <ui:repeat var="studyProgram" value="#{student.studyProgramList}">
                             <h:outputText value="#{studyProgram.title} " />
                         </ui:repeat>
@@ -26,35 +38,35 @@
                 </p:dataTable>
             </p:fieldset>
 
-            <h2>Create new course and student</h2>
+            <h2>Prideti nauja studenta ir studiju programa</h2>
             <table>
                 <tr>
                     <td>
                         <h:panelGrid columns="3">
-                            <p:outputLabel for="firstName" value="First name"/>
+                            <p:outputLabel for="firstName" value="Vardas"/>
                             <p:inputText id="firstName" value="#{requestUseCaseControllerJPA.student.firstName}"/>
                             <p:message for="firstName"/>
 
-                            <p:outputLabel for="lastName" value="Last name"/>
+                            <p:outputLabel for="lastName" value="Pavarde"/>
                             <p:inputText id="lastName" value="#{requestUseCaseControllerJPA.student.lastName}"/>
                             <p:message for="lastName"/>
 
-                            <p:outputLabel for="regnr" value="Registration No."/>
+                            <p:outputLabel for="regnr" value="Studento numeris"/>
                             <p:inputText id="regnr" value="#{requestUseCaseControllerJPA.student.registrationNo}"/>
                             <p:message for="regnr"/>
                         </h:panelGrid>
                     </td>
                     <td>
                         <h:panelGrid columns="3">
-                            <p:outputLabel for="courseName" value="Study program name"/>
-                            <p:inputText id="courseName" value="#{requestUseCaseControllerJPA.program.title}"/>
-                            <p:message for="courseName"/>
+                            <p:outputLabel for="programName" value="Studiju programa"/>
+                            <p:inputText id="programName" value="#{requestUseCaseControllerJPA.program.title}"/>
+                            <p:message for="programName"/>
                         </h:panelGrid>
                     </td>
                 </tr>
             </table>
 
-            <p:commandButton value="Create student and course"
+            <p:commandButton value="Pridėti"
                              actionListener="#{requestUseCaseControllerJPA.createProgramStudent()}"
                              ajax="false"/>
 

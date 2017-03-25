@@ -4,11 +4,11 @@
         "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
     <typeAliases>
-        <typeAlias type="lt.vu.mybatis.model.Student" alias="Student"/>
-        <typeAlias type="lt.vu.mybatis.model.Room" alias="Room"/>
-        <typeAlias type="lt.vu.mybatis.model.Dormitory" alias="Dormitory"/>
-        <typeAlias type="lt.vu.mybatis.model.StudyProgram" alias="StudyProgram"/>
-        <typeAlias type="lt.vu.mybatis.model.StudentStudyProgram" alias="StudentStudyProgram"/>
+        <typeAlias type="deivydas.mybatis.model.Student" alias="Student"/>
+        <typeAlias type="deivydas.mybatis.model.Room" alias="Room"/>
+        <typeAlias type="deivydas.mybatis.model.Dormitory" alias="Dormitory"/>
+        <typeAlias type="deivydas.mybatis.model.StudyProgram" alias="StudyProgram"/>
+        <typeAlias type="deivydas.mybatis.model.StudentStudyProgram" alias="StudentStudyProgram"/>
     </typeAliases>
     <environments default="development">
         <environment id="development">
