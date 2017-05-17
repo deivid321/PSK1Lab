@@ -12,11 +12,14 @@
 
     <h:body>
         <h1>Prideti studenta ir studiju programa</h1>
-        <h:form>
-            <p:fieldset legend="Studentai ir studiju programos" toggleable="false" style="width: 100%">
-                <p:dataTable value="#{requestUseCaseControllerJPA.getAllStudents()}" var="student">
-                    <f:facet name="header">
-                        Studentas
+        <h:form id="form">
+            <p:fieldset id="list" legend="Studentai ir studiju programos" toggleable="false" style="width: 100%">
+                <p:dataTable value="#{requestUseCaseControllerJPA.allStudents}" var="student">
+                    <f:facet name="legend">
+                        All students
+                        <p:commandButton value="Refresh" icon="ui-icon-arrowrefresh-1-e"
+                                         actionListener="#{requestUseCaseControllerJPA.reloadAll}"
+                                         update=":form:list"/>
                     </f:facet>
                     <p:column headerText="Vardas">
                         <h:outputText value="#{student.firstName}" />
@@ -35,8 +38,58 @@
                             <h:outputText value="#{studyProgram.title} " />
                         </ui:repeat>
                     </p:column>
+                    <p:column>
+                        <p:commandButton value="Edit" icon="ui-icon-pencil"
+                                         actionListener="#{requestUseCaseControllerJPA.prepareForEditing(student)}"
+                                         update=":form:studentDetail :form:list"
+                                         oncomplete="PF('studentDialog').show()" />
+                    </p:column>
                 </p:dataTable>
             </p:fieldset>
+
+            <p:dialog header="Edit Student" widgetVar="studentDialog" modal="true" closable="true" resizable="false" closeOnEscape="true">
+                <p:outputPanel id="studentDetail">
+                    <h:outputText value="No student was selected... Weird..." rendered="#{empty requestUseCaseControllerJPA.getSelectedStudentA()}" />
+                    <p:panelGrid  columns="3" rendered="#{not empty requestUseCaseControllerJPA.selectedStudent}"
+                                  columnClasses="label,value" styleClass="ui-noborder">
+                        <p:outputLabel for="firstNameEdit" value="First name:"/>
+                        <p:inputText id="firstNameEdit" value="#{requestUseCaseControllerJPA.selectedStudent.firstName}"/>
+                        <p:message for="firstNameEdit"/>
+
+                        <p:outputLabel for="lastNameEdit" value="Last name:"/>
+                        <p:inputText id="lastNameEdit" value="#{requestUseCaseControllerJPA.selectedStudent.lastName}"/>
+                        <p:message for="lastNameEdit"/>
+
+                        <p:outputLabel for="regnrEdit" value="Numeris:"/>
+                        <p:inputText id="regnrEdit" value="#{requestUseCaseControllerJPA.selectedStudent.registrationNo}"/>
+                        <p:message for="regnrEdit"/>
+
+                        <p:outputLabel for="roomEdit" value="Kambaris:"/>
+                        <p:inputText id="roomEdit" value="#{requestUseCaseControllerJPA.selectedStudent.room.name}"/>
+                        <p:message for="room"/>
+
+                        <h:outputText value="Study programs:"/>
+                        <p:selectCheckboxMenu id="studies" value="#{requestUseCaseControllerJPA.selectedStudent.getStudyProgramList}"
+                                              converter="omnifaces.SelectItemsIndexConverter"
+                                              label="Select study programs:" updateLabel="true"
+                                              filter="true" filterMatchMode="startsWith" panelStyle="width:250px">
+                            <f:attribute name="collectionType" value="java.util.ArrayList" /> <!-- Kitaip JSF bando kurti naują Hibernate PersistentBag ir būna bėdos... -->
+                            <f:selectItems value="#{requestUseCaseControllerJPA.getAllStudyPrograms}" var="program"
+                                           itemLabel="#{program.title}" itemValue="#{program}" />
+                        </p:selectCheckboxMenu>
+                        <p:message for="studies"/>
+
+                        <h:outputText value="Opt. version:" />
+                        <h:outputText value="#{requestUseCaseControllerJPA.selectedStudent.optLockVersion}" style="font-weight: bold"/>
+                    </p:panelGrid>
+
+                    <p:commandButton value="Update" actionListener="#{requestUseCaseControllerJPA.updateSelectedStudent}"
+                                     rendered="#{empty requestUseCaseControllerJPA.conflictingStudent}"
+                                     update=":form:studentDetail"
+                                     icon="ui-icon-check" style="margin-top: 1em"
+                                     oncomplete="if (args &amp;&amp; !args.validationFailed) PF('studentDialog').hide()" />
+                </p:outputPanel>
+            </p:dialog>
 
             <h2>Prideti nauja studenta ir studiju programa</h2>
             <table>

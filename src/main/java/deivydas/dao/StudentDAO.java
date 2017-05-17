@@ -19,4 +19,14 @@ public class StudentDAO {
     public List<StudentEntity> getAllStudents() {
         return em.createNamedQuery("Student.findAll", StudentEntity.class).getResultList();
     }
+
+    public void updateAndFlush(StudentEntity student) {
+        em.merge(student);
+        em.flush();
+    }
+
+
+    public StudentEntity findById(Integer id) {
+        return em.find(StudentEntity.class, id);
+    }
 }
