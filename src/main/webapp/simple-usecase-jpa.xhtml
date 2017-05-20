@@ -14,13 +14,14 @@
         <h1>Prideti studenta ir studiju programa</h1>
         <h:form id="form">
             <p:fieldset id="list" legend="Studentai ir studiju programos" toggleable="false" style="width: 100%">
+                <f:facet name="legend">
+                    All students
+                    <p:commandButton value="Refresh" icon="ui-icon-arrowrefresh-1-e"
+                                     actionListener="#{requestUseCaseControllerJPA.reloadAll}"
+                                     update=":form:list"/>
+                </f:facet>
                 <p:dataTable value="#{requestUseCaseControllerJPA.allStudents}" var="student">
-                    <f:facet name="legend">
-                        All students
-                        <p:commandButton value="Refresh" icon="ui-icon-arrowrefresh-1-e"
-                                         actionListener="#{requestUseCaseControllerJPA.reloadAll}"
-                                         update=":form:list"/>
-                    </f:facet>
+
                     <p:column headerText="Vardas">
                         <h:outputText value="#{student.firstName}" />
                     </p:column>
@@ -50,7 +51,7 @@
             <p:dialog header="Edit Student" widgetVar="studentDialog" modal="true" closable="true" resizable="false" closeOnEscape="true">
                 <p:outputPanel id="studentDetail">
                     <h:outputText value="No student was selected... Weird..." rendered="#{empty requestUseCaseControllerJPA.getSelectedStudentA()}" />
-                    <p:panelGrid  columns="3" rendered="#{not empty requestUseCaseControllerJPA.selectedStudent}"
+                    <p:panelGrid  columns="3" rendered="#{not empty requestUseCaseControllerJPA.getSelectedStudentA()}"
                                   columnClasses="label,value" styleClass="ui-noborder">
                         <p:outputLabel for="firstNameEdit" value="First name:"/>
                         <p:inputText id="firstNameEdit" value="#{requestUseCaseControllerJPA.selectedStudent.firstName}"/>
@@ -90,38 +91,6 @@
                                      oncomplete="if (args &amp;&amp; !args.validationFailed) PF('studentDialog').hide()" />
                 </p:outputPanel>
             </p:dialog>
-
-            <h2>Prideti nauja studenta ir studiju programa</h2>
-            <table>
-                <tr>
-                    <td>
-                        <h:panelGrid columns="3">
-                            <p:outputLabel for="firstName" value="Vardas"/>
-                            <p:inputText id="firstName" value="#{requestUseCaseControllerJPA.student.firstName}"/>
-                            <p:message for="firstName"/>
-
-                            <p:outputLabel for="lastName" value="Pavarde"/>
-                            <p:inputText id="lastName" value="#{requestUseCaseControllerJPA.student.lastName}"/>
-                            <p:message for="lastName"/>
-
-                            <p:outputLabel for="regnr" value="Studento numeris"/>
-                            <p:inputText id="regnr" value="#{requestUseCaseControllerJPA.student.registrationNo}"/>
-                            <p:message for="regnr"/>
-                        </h:panelGrid>
-                    </td>
-                    <td>
-                        <h:panelGrid columns="3">
-                            <p:outputLabel for="programName" value="Studiju programa"/>
-                            <p:inputText id="programName" value="#{requestUseCaseControllerJPA.program.title}"/>
-                            <p:message for="programName"/>
-                        </h:panelGrid>
-                    </td>
-                </tr>
-            </table>
-
-            <p:commandButton value="Pridėti"
-                             actionListener="#{requestUseCaseControllerJPA.createProgramStudent()}"
-                             ajax="false"/>
 
             <p:messages globalOnly="true"/>
         </h:form>

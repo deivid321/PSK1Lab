@@ -1,9 +1,12 @@
 package deivydas;
 
+import deivydas.dao.RoomDAO;
 import deivydas.dao.StudentDAO;
 import deivydas.dao.StudyProgramDAO;
+import deivydas.entities.RoomEntity;
 import deivydas.entities.StudentEntity;
 import deivydas.entities.StudyProgramEntity;
+import deivydas.interceptors.DeivydoInterceptor;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.Hibernate;
@@ -11,6 +14,7 @@ import org.omnifaces.cdi.ViewScoped;
 import org.primefaces.context.RequestContext;
 
 import javax.annotation.PostConstruct;
+import javax.decorator.Delegate;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.OptimisticLockException;
@@ -24,10 +28,7 @@ import java.util.List;
 @Slf4j
 public class RequestUseCaseControllerJPA implements Serializable{
 
-    /*
-     * Būsena, kurią saugome ViewScoped kontekste:
-     */
-    @Getter private StudentEntity selectedStudent=null;
+    @Getter private StudentEntity selectedStudent;
     @Getter private StudentEntity conflictingStudent;
     @Getter private List<StudentEntity> allStudents;
 
@@ -43,18 +44,21 @@ public class RequestUseCaseControllerJPA implements Serializable{
     @Inject
     private StudentDAO studentDAO;
 
+    @Inject
+    private RoomDAO roomDAO;
+
+
+    @Getter List<RoomEntity> allRooms = new ArrayList<>();
+
     @PostConstruct
     public void init() {
         reloadAll();
     }
 
+    @DeivydoInterceptor
     public void prepareForEditing(StudentEntity student) {
         selectedStudent = student;
         conflictingStudent = null;
-    }
-
-    public StudentEntity getSelectedStudentA(){
-        return selectedStudent;
     }
 
     @Transactional
@@ -79,7 +83,14 @@ public class RequestUseCaseControllerJPA implements Serializable{
 
     public void reloadAll() {
         allStudents = studentDAO.getAllStudents();
+        for (StudentEntity s : allStudents){
+            Hibernate.initialize(s.getStudyProgramList());
+        }
         allStudyPrograms = studyProgramDAO.getAllStudyPrograms();
+        for (StudyProgramEntity e : allStudyPrograms){
+            Hibernate.initialize(e.getStudentList());
+        }
+        allRooms = roomDAO.getAllRooms();
     }
 
     @Transactional
@@ -91,7 +102,6 @@ public class RequestUseCaseControllerJPA implements Serializable{
         }
         student.getStudyProgramList().add(program);
         program.getStudentList().add(student);
-        if (create) studyProgramDAO.create(program);
         studentDAO.create(student);
         log.info("Maybe OK...");
     }

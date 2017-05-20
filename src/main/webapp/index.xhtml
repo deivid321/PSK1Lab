@@ -26,11 +26,24 @@
     </h:form>
 
     <dl>
-
+        <dd>
+            <h:form id="registration">
+                <p>Registration.</p>
+                <p>Please enter your name:
+                    <p:inputText id="name1" value="#{studentShow.name}"/>
+                    <p:commandButton value="OK" action="#{studentShow.find}" ajax="false" disabled="#{!studentShow.enableRegister}"/>
+                </p>
+                <p:outputPanel id ="status" rendered="#{studentShow.showStatus}">
+                    <p>#{studentShow.status}</p>
+                    <p:commandButton value="Refresh" action="#{studentShow.updateStatus}" update=":registration" rendered="#{!studentShow.enableRegister}" />
+                </p:outputPanel>
+            </h:form>
+        </dd>
         <dt><b>Request type use-case example:</b></dt>
         <dd>
             <p>
                 <h:link outcome="simple-usecase-jpa">Create new course and student (DAO with JPA)</h:link><br/>
+                <h:link outcome="edit">Edit</h:link><br/>
                 <h:link outcome="simple-usecase-mybatis">Create new course and student (DAO with MyBatis)</h:link>
             </p>
         </dd>
@@ -43,39 +56,9 @@
         </dd>
     </dl>
     <p:fieldset legend="Visa informacija" toggleable="true" status="hidden" style="width: 50%">
-        <p:dataTable value="#{requestUseCaseControllerJPA.getAllStudyPrograms()}" var="program">
-            <p:column headerText="Studiju programos">
-                <h:outputText value="#{program.title}"/>
-            </p:column>
-            <p:column headerText="Studentai">
-                <ui:repeat var="student" value="#{program.studentList}">
-                    <h:outputText value="#{student.firstName} #{student.lastName}; " />
-                </ui:repeat>
-            </p:column>
-        </p:dataTable>
+
         <br></br>
-        <p:dataTable headerText="Students" value="#{requestUseCaseControllerJPA.getAllStudents()}" var="student">
-            <f:facet name="header">
-                Visi studentai
-            </f:facet>
-            <p:column headerText="Vardas">
-                <h:outputText value="#{student.firstName}"/>
-            </p:column>
-            <p:column headerText="Pavarde">
-                <h:outputText value="#{student.lastName}"/>
-            </p:column>
-            <p:column headerText="Studento numeris">
-                <h:outputText value="#{student.registrationNo}"/>
-            </p:column>
-            <p:column headerText="Studiju programa">
-                <ui:repeat var="studyProgram" value="#{student.studyProgramList}">
-                    <h:outputText value="#{studyProgram.title} " />
-                </ui:repeat>
-            </p:column>
-            <p:column headerText="Studento kambaris">
-                <h:outputText value="#{student.room.name}"/>
-            </p:column>
-        </p:dataTable>
+
         <br></br>
         <p:dataTable value="#{requestUseCaseControllerMyBatis.getAllRooms()}" var="room">
             <f:facet name="header">

@@ -2,6 +2,7 @@ package deivydas.entities;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.johnzon.mapper.JohnzonIgnore;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -14,6 +15,9 @@ import java.util.List;
 @Setter
 @Entity
 @Table(name = "ROOM", schema = "PUBLIC", catalog = "DORMITORYDB")
+@NamedQueries({
+        @NamedQuery(name = "Room.findAll", query = "SELECT r FROM RoomEntity r"),
+})
 public class RoomEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,7 +33,8 @@ public class RoomEntity {
     @Column(name = "MAX_PEOPLE", nullable = true)
     private Integer maxPeople;
 
-    @OneToMany(mappedBy = "room")
+    @JohnzonIgnore
+    @OneToMany(fetch=FetchType.EAGER, mappedBy = "room")
     private List<StudentEntity> studentList = new ArrayList<>();
 
     @Override

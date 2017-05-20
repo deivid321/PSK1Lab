@@ -2,6 +2,7 @@ package deivydas.entities;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.johnzon.mapper.JohnzonIgnore;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -41,13 +42,14 @@ public class StudentEntity {
     private Integer optLockVersion;
 
     @JoinColumn(name = "ROOM_ID", referencedColumnName = "ID")
-    @ManyToOne
+    @ManyToOne(cascade=CascadeType.ALL)
     private RoomEntity room;
 
     @JoinTable(name = "STUDENT_STUDY_PROGRAM", joinColumns = {
             @JoinColumn(name = "STUDENT_ID", referencedColumnName = "ID")}, inverseJoinColumns = {
             @JoinColumn(name = "STUDY_PROGRAM_ID", referencedColumnName = "ID")})
-    @ManyToMany
+    @JohnzonIgnore
+    @ManyToMany(cascade=CascadeType.ALL)
     private List<StudyProgramEntity> studyProgramList = new ArrayList<>();
 
     @Override

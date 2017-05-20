@@ -5,5 +5,13 @@
         xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee 
                       http://xmlns.jcp.org/xml/ns/javaee/beans_1_1.xsd"
         bean-discovery-mode="annotated">
-
+    <alternatives>
+        <class>deivydas.dao.StudentDAOAlt</class>
+    </alternatives>
+    <interceptors>
+        <class>deivydas.interceptors.OutputInterceptor</class>
+    </interceptors>
+    <decorators>
+        <class>deivydas.dao.RoomTitleDecorator</class>
+    </decorators>
 </beans>

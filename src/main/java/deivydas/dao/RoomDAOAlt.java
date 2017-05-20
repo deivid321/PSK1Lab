@@ -4,20 +4,16 @@ import deivydas.entities.RoomEntity;
 import deivydas.entities.StudentEntity;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.inject.Alternative;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
+import javax.ws.rs.Produces;
 import java.util.List;
 
-@ApplicationScoped
-public class RoomDAO implements IRoomDAO{
-    @Inject
-    protected EntityManager em;
-
+@Alternative
+public class RoomDAOAlt extends RoomDAO {
     public void create(RoomEntity room) {
         em.persist(room);
     }
 
-    public List<RoomEntity> getAllRooms() {
-        return em.createNamedQuery("Room.findAll", RoomEntity.class).getResultList();
-    }
 }
